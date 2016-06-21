@@ -1,0 +1,29 @@
+---
+
+- name: install pythons and setup buildout conf
+  hosts: local
+  when: init|success
+  tasks:
+   - name: Create buildout defaults folders
+     register: buildout_folders_created
+     file: path={{ ansible_env.HOME }}/.buildout/{{ item }} state=directory
+     with_items:
+       - eggs
+       - downloads
+       - extends
+
+   - name: Create buildout default config
+     when: buildout_folders_created|success
+     register: buildout_config_created
+     template: src=templates/default.cfg.j2 dest={{ ansible_env.HOME }}/.buildout/default.cfg
+
+   - name: Clone buildout python
+     register: buildout_python_repo_clonned
+     git: repo=https://github.com/collective/buildout.python.git
+          dest={{ ansible_env.HOME }}/.local/buildout.python
+   
+   - name: Build buildout python
+     when: buildout_python_repo_clonned|success
+     shell: python bootstrap.py && bin/buildout -n
+     args:
+        chdir: "{{ ansible_env.HOME }}/.local/buildout.python/"

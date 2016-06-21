@@ -1,0 +1,50 @@
+---
+
+- hosts: local
+
+  strategy: free
+
+  tasks:
+
+   - name: install packages for ansible support
+     register: pre_init
+     shell: dnf -y install python python-dnf
+     become: yes
+     become_user: root
+     become_method: su
+
+   - name: Base Libs Installing
+     register: init`1`
+     when: pre_init|success
+     become: yes
+     become_user: root
+     become_method: su
+     dnf: name={{ item  }} state=installed
+     with_items:
+      - httpd
+      - openssl-devel
+      - openssl-libs
+      - tmux
+      - vim
+      - python3
+      - python3-devel
+      - python
+      - python-devel
+      - libffi-devel
+      - postgresql
+      - postgresql-libs
+      - postgresql-devel
+      - postgresql-server
+      - postgresql-static
+      - postgresql-plpython
+      - postgresql-plpython3
+      - libxml2-devel
+      - libxslt-devel
+      - redis
+      - keepassx
+      - kernel-devel
+      - kernel-headers
+      - kernel-modules
+      - kernel-modules-extra
+      - kernel-tools
+      - kernel-tools-libs
