@@ -21,9 +21,13 @@
      register: buildout_python_repo_clonned
      git: repo=https://github.com/collective/buildout.python.git
           dest={{ ansible_env.HOME }}/.local/buildout.python
-   
+
    - name: Build buildout python
      when: buildout_python_repo_clonned|success
      shell: python bootstrap.py && bin/buildout -n
      args:
         chdir: "{{ ansible_env.HOME }}/.local/buildout.python/"
+
+
+# rsync --ignore-existing -r -z --compress-level=9 enkidulan@enkidulan.tk:/home/enkidulan/enkiploneblog/var/backup ~/Documents/blog/
+
