@@ -7,14 +7,37 @@
   tasks:
 
    - name: install packages for ansible support
-     register: pre_init
+     register: pre_init_0
      shell: dnf -y install python python-dnf
      become: yes
      become_user: root
      become_method: su
 
+   - name: add non-free repos
+     register: pre_init_1
+     when: pre_init_0|success
+     become: yes
+     become_user: root
+     become_method: su
+     dnf:
+         name: "{{ item }}"
+         state: installed
+         disable_gpg_check: yes
+     with_items:
+         - "http://rpm.livna.org/livna-release.rpm"
+         - "http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm"
+         - "http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm"
+
+   - name: upgrade system
+     register: pre_init
+     when: pre_init_1|success
+     become: yes
+     become_user: root
+     become_method: su
+     dnf: name=* state=latest disable_gpg_check=yes
+
    - name: Base Libs Installing
-     register: init`1`
+     register: init
      when: pre_init|success
      become: yes
      become_user: root
@@ -30,6 +53,7 @@
       - python3-devel
       - python
       - python-devel
+      - gcc-c++
       - libffi-devel
       - postgresql
       - postgresql-libs
