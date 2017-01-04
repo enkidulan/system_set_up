@@ -2,7 +2,6 @@
 
 - name: install pythons and setup buildout conf
   hosts: local
-  when: init|success
   tasks:
    - name: Create buildout defaults folders
      register: buildout_folders_created

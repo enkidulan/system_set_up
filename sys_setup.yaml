@@ -55,6 +55,9 @@
       - python-devel
       - gcc-c++
       - libffi-devel
+      - libyaml
+      - libyaml-devel
+      - patch
       - postgresql
       - postgresql-libs
       - postgresql-devel
@@ -72,3 +75,29 @@
       - kernel-modules-extra
       - kernel-tools
       - kernel-tools-libs
+      - curl
+      - zeromq
+      - zeromq-devel
+      - libpng
+      - libpng-devel
+      - libjpeg-turbo
+      - libjpeg-turbo-devel
+      - sqlite
+      - sqlite-devel
+      - sqlite-libs
+      - rpm-build 
+      - cabextract 
+      - ttmkfdir 
+      - wget
+      - zlib
+      - zlib-devel
+# media deps
+      - gstreamer-plugins-ugly 
+      - gstreamer-plugins-bad
+      - libdvdread 
+      - libdvdcss 
+      - libdvdnav 
+      - gstreamer-plugins-ugly 
+      - gstreamer-plugins-bad 
+      - gstreamer-plugins-ugly  
+      - audacious-plugins-freeworld-mp3
