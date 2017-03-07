@@ -65,6 +65,7 @@
       - postgresql-static
       - postgresql-plpython
       - postgresql-plpython3
+      - python-psycopg2
       - libxml2-devel
       - libxslt-devel
       - redis
@@ -101,3 +102,48 @@
       - gstreamer-plugins-bad 
       - gstreamer-plugins-ugly  
       - audacious-plugins-freeworld-mp3
+# other
+      - fish
+
+
+   - name: Initiate database
+     command: service postgresql initdb
+              creates=/var/lib/pgsql/data/postgresql.conf
+
+   - name: Start PostgreSQL and enable at boot
+     service: name=postgresql
+              enabled=yes
+              state=started
+
+   - name: Ensure PostgreSQL is listening on all localhost
+     lineinfile: dest=/var/lib/pgsql/data/postgresql.conf
+       regexp='^#?listen_addresses\s*='
+       line="listen_addresses = '127.0.0.1'"
+       state=present
+     notify: restart postgresql
+
+
+   - lineinfile: dest=/var/lib/pgsql/data/pg_hba.conf
+                 regexp='host\s+all\s+all\s+127.0.0.1/32\s+md5'
+                 line='host all all 127.0.0.1/32 md5'
+                 insertbefore=BOF
+     notify: restart postgresql
+
+
+   # -  postgresql_user:
+   #      name: "{{ ansible_env.USERNAME }}"
+   #      password: qwerty
+   #      role_attr_flags: SUPERUSER
+
+
+   - name: Start Redis and enable at boot
+     service: name=redis
+              enabled=yes
+              state=started
+
+
+
+  handlers:
+   - name: restart postgresql
+     service: name=postgresql state=restarted
+

@@ -18,4 +18,6 @@
       unarchive: src=/tmp/sublime_text_3.tar.bz2 dest={{ ansible_env.HOME }}/.local/ copy=no
 
     - name: Download Sublime Packages
-      get_url: url="https://packagecontrol.io/Package Control.sublime-package" dest={{ ansible_env.HOME }}/.local/sublime_text_3/Packages/
+      get_url: url="{{item}}" dest="{{ ansible_env.HOME }}/.local/sublime_text_3/Packages/"
+      with_items:
+        - https://packagecontrol.io/Package Control.sublime-package
